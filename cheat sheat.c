@@ -4,5 +4,5 @@ while((c = getchar()) != '\n' && c != EOF);
 
 
 //comando del compiler
-//gcc Test.c -o test -ansi -pedantic -Wall
+gcc Test.c -o test -ansi -pedantic -Wall
 	
