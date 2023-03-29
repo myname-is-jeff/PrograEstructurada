@@ -20,27 +20,21 @@ que no hay elementos repetidos en el arreglo.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef enum {
     TRUE,
     FALSE
 } bool_t;
-int contador(int arr[]){
 
-}
-
-bool_t estaEnArr(int arr[], int aux){
+bool_t estaEnArr(int arr[], int aux,int len){
     bool_t res;
-    int len;
-    int i;
-    len = (sizeof(arr)/sizeof(arr[0]));
     res = TRUE;
-    for(i = 0; (i != len) && (res == TRUE); i++){
+	
+    for(int i = 0; (i < len) && (res == TRUE); i++){
         if (arr[i] != aux){
-            res = TRUE;}
+            res = FALSE;}
         else {
-            res = FALSE;
+            res = TRUE;
         }
     }
     return res;
@@ -57,20 +51,15 @@ bool_t esPos(int aux){
     return res;
 }
 
-void cargarArrPNR(int arr[]){
+void cargarArrPNR(int arr[],int len){
     int aux;
-    int i;
-    int len;
-    char c;
-
-    len = 10;
-    
+   
     printf("Ingrese un entero positivo o 0 para terminar: ");
     scanf("%d",&aux);
 
-    for (i = 0; aux != 0 && i != len; i++){
+    for (int i = 0; (i < len) && (aux != 0); i++){
     
-        if (esPos(aux) == TRUE && estaEnArr(arr, aux) == TRUE){
+        if (esPos(aux) == TRUE && estaEnArr(arr, aux, len) == FALSE){
             arr[i] = aux;
         }
         else {
@@ -82,29 +71,31 @@ void cargarArrPNR(int arr[]){
     }
 }
 
-void imprimirArr(int arr[]){
-	size_t len;
+void imprimirArr(int arr[],size_t len){
 	int i;
-	len = 10;
-	printf("%d\n",((int)len));
-	for(i = 0; i != ((int)len); i++){
+	printf("%d\n",(len));
+	for(i = 0; i != (len); i++){
 		printf(" ___");
 	}
 	printf("\n| ");
-	for(i = 0; i != ((int)len); i++){
+	for(i = 0; i != (len); i++){
 		printf("%d %s",arr[i],"| ");
 	}
 	printf("\n");
-	for(i = 0; i != ((int)len); i++){
+	for(i = 0; i != (len); i++){
 		printf(" ---");
 	}
 }
 
 int main(void){
-    int arr[11];
+	int T;
+	printf("Ingrese el largo del arreglo: ");
+	scanf("%d",&T);
+	printf("%d\n",T);
+    int arr[T];
 
-    cargarArrPNR(arr);
-    imprimirArr(arr);
+    cargarArrPNR(arr,T);
+    imprimirArr(arr,T);
     return 0;
 }
 
