@@ -29,39 +29,58 @@ typedef enum {
 void cargarArr(char arr[], int len){
 	printf("Ingrese texto: ");
 	while(fgets(arr,len,stdin) == NULL){
-		printf("Ingrese texto: ");
+		printf("Ingrese texto:");
 	}
 }
 
 void imprimirArr(char arr[]){
-	printf("Resultado: %s",arr);
+	int i;
+	
+	printf("Resultado:");
+	for(i = 0; arr[i] != '\n';i++){
+		printf("%c",arr[i]);
+	}
 }
 	
 void normalizar(char arr[], int len){
 	bool_t ban = TRUE;
 	char aux[len];
-	int esp = (int)" ";
+	int i,y,j;
+	
 	//verifico que el primer caracter alfabetico sea mayuscula y lo cambio en caso contrario
-	for(int i = 0; (i < len) && ban == TRUE; i++){
-		if(isalpha((int)arr[i])){
+	for(i = 0; arr[i] != '\n' && ban == TRUE; i++){
+		if(isalpha(arr[i])){
 			ban = FALSE;
-			if(isupper((int)arr[i])){
-				toupper((int)arr[i]);
+			if(isupper(arr[i]) == 0){
+				arr[i] = toupper(arr[i]);
 			}
-		}
-		printf("%d",i);
-	}
-	//elimino los espacios repetidos 
-	for(int i = 0; (i < len); i++){
-		aux[i] = arr[i];
-		while(((arr[i]) == esp) && (arr[i] == esp)){
-			i++;
 		}
 		
 	}
-	for(int i = 0; (i < len); i++){
+	//elimino los espacios repetidos 
+	j = 0;
+	for(i = 0; arr[i] != '\n'; i++){
+		while(isspace(arr[i])){
+			i++;
+		}
+		y = i + 1;
+		if((arr[i] == arr[y]) != 0 && isspace(arr[i])){
+		}
+		else{
+			printf("%c\n",arr[i]);
+			aux[j] = arr[i];
+			j++;
+		}
+	}
+	aux[j] = '.';
+	j++;
+	aux[j] = '\n';
+	printf("\n%s\n",aux);
+	for(i = 0; aux[i] != '\n'; i++){
 		arr[i] = aux[i];
 	}
+	//i++;
+	arr[i] = aux[i];
 }
 	
 int main (void){
@@ -71,7 +90,6 @@ int main (void){
 		printf("---\n");
 	}
 	cargarArr(str, max_str);
-	imprimirArr(str);
 	normalizar(str, max_str);
 	imprimirArr(str);
 	

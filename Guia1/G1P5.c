@@ -23,8 +23,8 @@ que no hay elementos repetidos en el arreglo.
 #include <string.h>
 
 typedef enum {
-    TRUE,
-    FALSE
+    FALSE,
+    TRUE
 } bool_t;
 
 bool_t estaEnArr(int arr[], int aux){
@@ -33,13 +33,14 @@ bool_t estaEnArr(int arr[], int aux){
     
     res = FALSE;
 
-    for(i = 0; (i < 100) && (res == FALSE); i++){
+    for(i = 0; (arr[i] != '\0') && (res == FALSE); i++){
         if (arr[i] != aux){
             res = FALSE;}
         else {
             res = TRUE;
         }
     }
+	
     return res;
 }
 
@@ -54,30 +55,42 @@ bool_t esPos(int aux){
     return res;
 }
 
+void limpieza(void){
+	char c;
+	
+	while((c = getchar()) != '\n' && c != EOF);
+}
+
 void cargarArrPNR(int arr[]){
     int aux;
 	int i;
+	int end;
+	int y;
 	
+	end = '\0';
 	i = 0;
+	arr[i] = end;
 	
     printf("Ingrese un entero positivo o 0 para terminar: ");
     scanf("%d",&aux);
 
 	while(aux != 0){
-    
-        if (esPos(aux) == TRUE && estaEnArr(arr, aux) == FALSE){
-            arr[i] = aux;
-        }
-        else {
-            i--;
-        }
-		/*while((c =getchar())*/   
-        printf("Ingrese un entero positivo o 0 para terminar: ");
-        scanf("%d",&aux);
+		
+		if (esPos(aux) == TRUE && estaEnArr(arr, aux) == FALSE){
+			arr[i] = aux;
+			y = i + 1;
+			arr[y] = end;
+		}
+		else {
+			i--;
+		}
+		
+		limpieza();
+		printf("Ingrese un entero positivo o 0 para terminar: ");
+		scanf("%d",&aux);
+		
 		i++;
-		printf("%d\n",arr[i]);
     }
-	arr[i] = '\0';
 }
 
 void imprimirArr(int arr[]){
@@ -104,11 +117,11 @@ void imprimirArr(int arr[]){
 }
 
 int main(void){
-	int arr[100] = {1,2,3,4,5,6,7,8,9};
-
-   /* cargarArrPNR(arr);*/
+	int arr[100];
+	
+    cargarArrPNR(arr);
     imprimirArr(arr);
-    printf("%d\n", estaEnArr(arr, 3));
+	
     return 0;
 }
 
