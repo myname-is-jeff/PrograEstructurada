@@ -12,7 +12,7 @@ normalizar: recibe por parámetro un arreglo de char y debe verificar que:
 En caso de encontrar alguna diferencia deberá ser corregida (modificar arreglo) .
 Desarrollar el programa principal que invocando a las funciones mencionadas, cargue el
 arreglo, lo imprima, luego lo normalice y por último lo vuelva a imprimir para verificar el
-texto.*/
+texto.*/
 
 #include <stdio.h>
 #include <stdlib.h>

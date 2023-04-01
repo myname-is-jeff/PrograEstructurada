@@ -18,44 +18,47 @@ impreso. Se debe utilizar las funciones que se solicita desarrollar.
 
 
 void cargarArr(int arr[], size_t len){
-	for(int i = 0;i < ((int)len);i++){
+	int i;
+    for(i = 0;i < ((int)len);i++){
 		arr[i] = (rand() % 10);
 		printf("%d - %d\n",i,arr[i]);
 	}
 }
 
 void imprimirArr(int arr[], size_t len){
-	printf("\n");
-	for(int i = 0; i != ((int)len); i++){
+	int i;
+    printf("\n");
+	for(i = 0; i != ((int)len); i++){
 		printf(" ___");
 	}
 	printf("\n| ");
-	for(int i = 0; i != ((int)len); i++){
+	for(i = 0; i != ((int)len); i++){
 		printf("%d %s",arr[i],"| ");
 	}
 	printf("\n");
-	for(int i = 0; i != ((int)len); i++){
+	for(i = 0; i != ((int)len); i++){
 		printf(" ---");
 	}
 }
 
 void invertirArr(int arr[],size_t len){
-	int aux[len];
-	int y = ((int)len);
-	y--;
-	for(int i = 0; i < ((int)len); i++){
-		aux[y] = arr[i];
-		y--;
-	}
-	for(int i = 0; i < ((int)len); i++){
-		arr[i] = aux[i];
+	int aux;
+    int i;
+    int y;
+    y = ((int)len)-1;
+	for(i = 0; i < ((int)len)/2; i++){
+		aux = arr[i];
+        arr[i] = arr[y-i];
+        arr[y-i] = aux;
 	}
 }
 
 void ordenarArr(int arr[],size_t len){
 	int aux;
-	for (int i = 0; i < ((int)len) - 1; i++) {
-		for (int j = i + 1; j < ((int)len); j++) {
+    int i;
+    int j;
+	for (i = 0; i < ((int)len) - 1; i++) {
+		for (j = i + 1; j < ((int)len); j++) {
 			if (arr[i] > arr[j]) {
 				aux = arr[i];
 				arr[i] = arr[j];

@@ -20,17 +20,20 @@ que no hay elementos repetidos en el arreglo.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef enum {
     TRUE,
     FALSE
 } bool_t;
 
-bool_t estaEnArr(int arr[], int aux,int len){
+bool_t estaEnArr(int arr[], int aux){
     bool_t res;
-    res = TRUE;
-	
-    for(int i = 0; (i < len) && (res == TRUE); i++){
+	int i;
+    
+    res = FALSE;
+
+    for(i = 0; (i < 100) && (res == FALSE); i++){
         if (arr[i] != aux){
             res = FALSE;}
         else {
@@ -51,51 +54,61 @@ bool_t esPos(int aux){
     return res;
 }
 
-void cargarArrPNR(int arr[],int len){
+void cargarArrPNR(int arr[]){
     int aux;
-   
+	int i;
+	
+	i = 0;
+	
     printf("Ingrese un entero positivo o 0 para terminar: ");
     scanf("%d",&aux);
 
-    for (int i = 0; (i < len) && (aux != 0); i++){
+	while(aux != 0){
     
-        if (esPos(aux) == TRUE && estaEnArr(arr, aux, len) == FALSE){
+        if (esPos(aux) == TRUE && estaEnArr(arr, aux) == FALSE){
             arr[i] = aux;
         }
         else {
             i--;
         }
-
+		/*while((c =getchar())*/   
         printf("Ingrese un entero positivo o 0 para terminar: ");
         scanf("%d",&aux);
+		i++;
+		printf("%d\n",arr[i]);
     }
+	arr[i] = '\0';
 }
 
-void imprimirArr(int arr[],size_t len){
+void imprimirArr(int arr[]){
 	int i;
-	printf("%d\n",(len));
-	for(i = 0; i != (len); i++){
+	
+	i = 0;
+	
+	while(arr[i] != '\0'){
 		printf(" ___");
+		i++;
 	}
+	i = 0;
 	printf("\n| ");
-	for(i = 0; i != (len); i++){
+	while(arr[i] != '\0'){
 		printf("%d %s",arr[i],"| ");
+		i++;
 	}
+	i = 0;
 	printf("\n");
-	for(i = 0; i != (len); i++){
+	while(arr[i] != '\0'){
 		printf(" ---");
+		i++;
 	}
 }
 
 int main(void){
-	int T;
-	printf("Ingrese el largo del arreglo: ");
-	scanf("%d",&T);
-	printf("%d\n",T);
-    int arr[T];
+	int arr[100] = {1,2,3,4,5,6,7,8,9};
 
-    cargarArrPNR(arr,T);
-    imprimirArr(arr,T);
+   /* cargarArrPNR(arr);*/
+    imprimirArr(arr);
+    printf("%d\n", estaEnArr(arr, 3));
     return 0;
 }
 
