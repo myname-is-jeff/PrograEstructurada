@@ -47,9 +47,9 @@ bool_t esPos(int aux){
 	return res;
 }	
 
-void cargarArrAle(int arr[], size_t len){
+void cargarArrAle(int arr[], int len){
 	int i;
-	for(i = 0;i < ((int)len);i++){
+	for(i = 0;i < len; i++){
 		arr[i] = (rand() % 100);
 	}
 }
