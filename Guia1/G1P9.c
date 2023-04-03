@@ -14,4 +14,13 @@ Nota1: (Método). Un ‘\0’ en una fila (y cualquier columna) determinará el fin de
 caracteres útiles de dicha fila. Y un ’\0’ en columna 0 (cero) en una fila cualquiera,
 determinará el fin de las filas útiles de la matriz.
 Este método (ad hoc) adoptado no permite identificar en la matriz cadena de caracteres
-vacías (sólo la última).*/
+vacías (sólo la última).
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define F 3
+#define C 4
+
+
