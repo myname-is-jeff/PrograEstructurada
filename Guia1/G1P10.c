@@ -9,4 +9,57 @@ en el archivo de texto. Para cargar los datos en la matriz utilizar el mismo mét
 descrito en ejercicio anterior.
 Desarrollar el programa principal que invocando a las función mencionada, pasándole el
 parámetro de la matriz y el nombre del archivo realice la carga. Luego imprimir la matriz
-en pantalla (utilizar alguna función realizada anteriormente).*/
+en pantalla (utilizar alguna función realizada anteriormente).
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+#define F 10
+#define C 10
+
+void cargarMatTexDeArch(char mat[][C]);
+void imprimirMat(char mat[][C]);
+
+int main(void){
+    char mat[F][C];
+
+    cargarMatTexDeArch(mat);
+    imprimirMat(mat);
+
+    return 0;
+}
+
+void cargarMatTexDeArch(char mat[][C]){
+    FILE *fp;
+    char str[100];
+    int i,j;
+    
+    fp = fopen("equipos.txt","r");
+    if(fp == NULL){
+        perror("Error opening file");
+        fclose(fp);
+    }
+    else{
+        for(i = 0; i < F; i++){
+            if(fgets(str, 100, fp) != NULL){
+                printf("\n%s\n",str);
+                for(j = 0; str[j] != '\n'; j++){
+                    mat[i][j] = str[j];
+                }
+            }
+            mat[i][j] = '\0';
+        }
+    }
+    fclose(fp);
+}
+
+void imprimirMat(char mat[][C]){
+    int i,j;
+
+    for(i = 0; i < C; i++){
+        for(j = 0; mat[i][j] != '\0'; j++){
+            printf("%c",mat[i][j]);
+        }
+        printf("\n");
+    }
+}
