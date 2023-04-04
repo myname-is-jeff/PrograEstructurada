@@ -56,7 +56,7 @@ void cargarMatTexDeArch(char mat[][C]){
 void imprimirMat(char mat[][C]){
     int i,j;
 
-    for(i = 0; i < C; i++){
+    for(i = 0; mat[i][0] != '\0'; i++){
         for(j = 0; mat[i][j] != '\0'; j++){
             printf("%c",mat[i][j]);
         }
