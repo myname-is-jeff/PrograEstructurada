@@ -14,8 +14,8 @@ en pantalla (utilizar alguna función realizada anteriormente).
 #include <stdio.h>
 #include <stdlib.h>
 
-#define F 10
-#define C 10
+#define F 20
+#define C 25
 
 void cargarMatTexDeArch(char mat[][C]);
 void imprimirMat(char mat[][C]);
@@ -41,25 +41,29 @@ void cargarMatTexDeArch(char mat[][C]){
     }
     else{
         for(i = 0; i < F; i++){
-            if(fgets(str, 100, fp) != NULL){
-                printf("\n%s\n",str);
+            if(fgets(str, 50, fp) != NULL){
                 for(j = 0; str[j] != '\n'; j++){
                     mat[i][j] = str[j];
                 }
+				mat[i][j++] = '\0';
             }
-            mat[i][j] = '\0';
+			else{
+				mat[i][0] = '\0';
+			}
         }
+		
     }
     fclose(fp);
 }
 
 void imprimirMat(char mat[][C]){
-    int i,j;
-
-    for(i = 0; mat[i][0] != '\0'; i++){
-        for(j = 0; mat[i][j] != '\0'; j++){
-            printf("%c",mat[i][j]);
-        }
-        printf("\n");
-    }
+	int i,j;
+	
+	for(i = 0; mat[i][0] != '\0'; i++){
+		printf("\n");
+		for(j = 0; mat[i][j] != '\0'; j++){
+			printf("%c ",mat[i][j]);
+		}
+		
+	}
 }
