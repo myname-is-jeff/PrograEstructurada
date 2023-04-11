@@ -9,4 +9,30 @@ ejercicios anteriores.
 Aclaración: Para realizar comparaciones y copia de cadena de caracteres se sugiere
 utilizar las funciones strcmp() y strcpy() de la librería string.h
 Importante: Una vez terminado el ejercicio, considerar desarrollar usted mismo las
-funciones strcmp y strcpy.*/
+funciones strcmp y strcpy.
+*/
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define N 25
+
+void ordenarTexto();
+void imprimirMat(char mat[][N]);
+
+
+
+
+void imprimirMat(char mat[][N]){
+	int i,j;
+	
+	for(i = 0; mat[i][0] != '\0'; i++){
+		printf("\n");
+		for(j = 0; mat[i][j] != '\0'; j++){
+			printf("%c ",mat[i][j]);
+		}
+		
+	}
+}
