@@ -21,18 +21,18 @@ funciones anteriormente descritas.
 #include <stdio.h>
 #include <stdlib.h>
 
-#define F
-#define C
+#define F 20
+#define C 10
 
 void cargarMatNumDeArch(int mat[][C], char nombre_arch[]);
-void imprimirMatNum(int mat[][C], int fil, int col);
+void imprimirMatNum(int mat[][C]);
 
 int main(void){
-    int mat[F][C], fil, col;
+    int mat[F][C];
     char nombre_arch = "puntos.txt";
     
     cargarMatNumDeArch(mat, nombre_arch);
-    imprimirMatNum(mat, fil, col);
+    imprimirMatNum(mat);
 
     return 0;
 }
@@ -42,7 +42,7 @@ void cargarMatNumDeArch(int mat[][C], char nombre_arch[]){
     char str[100];
     int i,j;
     
-    fp = fopen(nombre_arch,"r");
+    fp = fopen("puntos.txt","r");
     if(fp == NULL){
         perror("Error opening file");
         fclose(fp);
@@ -51,7 +51,12 @@ void cargarMatNumDeArch(int mat[][C], char nombre_arch[]){
         for(i = 0; i < F; i++){
             if(fgets(str, 50, fp) != NULL){
                 for(j = 0; str[j] != '\n'; j++){
-                    mat[i][j] = str[j];
+                    if(str[j] != ";"){
+                        mat[i][j] = (int)str[j];
+                    }
+                    else{
+                       mat[i][j] =" "; 
+                    }
                 }
 				mat[i][j++] = '\0';
             }
@@ -63,5 +68,14 @@ void cargarMatNumDeArch(int mat[][C], char nombre_arch[]){
     }
 }
 
-void imprimirMatNum(int mat[][C], int fil, int col);
-
+void imprimirMatNum(int mat[][C]){
+	int i,j;
+	
+	for(i = 0; mat[i][0] != '\0'; i++){
+		printf("\n");
+		for(j = 0; mat[i][j] != '\0'; j++){
+			printf("%c ",mat[i][j]);
+		}
+		
+	}
+}
