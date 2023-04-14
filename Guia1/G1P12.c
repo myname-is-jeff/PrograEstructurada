@@ -23,6 +23,7 @@ funciones anteriormente descritas.
 
 #define F 20
 #define C 10
+#define ILOGICO 123456
 
 
 void cargarMatNumDeArch(int mat[][C], char nombre_arch[]);
@@ -66,7 +67,7 @@ void csvNumParser(char str[], int aux[]){
 		}
 	}
 	printf("K-END-CSVPAR: %d\n", k);
-	aux[k] = '\n';
+	aux[k] = ILOGICO;
 }
 	
 void cargarMatNumDeArch(int mat[][C], char nombre_arch[]){
@@ -88,18 +89,18 @@ void cargarMatNumDeArch(int mat[][C], char nombre_arch[]){
 				printf("\n---- END csvNumParser ----\n\n");
 
 				printf("\n---- INIT aux check ----\n");
-				for(k = 0; aux[k] != '\n'; k++){
+				for(k = 0; aux[k] != ILOGICO; k++){
 					printf("aux; pos: %d -- value: %d\n", k, aux[k]);
 				}
 				printf("---- END aux check ----\n\n");
-				for(j = 0; aux[j] != '\n';j++){
+				for(j = 0; aux[j] != ILOGICO;j++){
 					mat[i][j] = aux[j];
 					printf("matcpy; posF: %d posC: %d  num: %d\n", i, j, mat[i][j]);
                 }
-				mat[i][j++] = '\0';
+				mat[i][j++] = ILOGICO;
             }
 			else{
-				mat[i][0] = '\0';
+				mat[i][0] = ILOGICO;
 			}
         }
         fclose(fp);
@@ -111,7 +112,7 @@ void imprimirMatNum(int mat[][C]){
 	
 	for(i = 0; i < F; i++){
 		printf("\n");
-		for(j = 0; mat[i][j] != '\0'; j++){
+		for(j = 0; mat[i][j] != ILOGICO; j++){
 			printf("%d ",mat[i][j]);
 		}
 		

@@ -2,38 +2,35 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define T 5
+#define T 0.0001
 #define MAX 21
+
 typedef enum{
 	FALSE,
 	TRUE
 }bool_t;
 
-struct s_contador{
+typedef struct s_contador{
     int num;
 	int veces;
-};
+}t_cont;
 
-typedef struct s_contador t_cont;
 
 void cargarArrRand(t_cont arr[]);
-int cmpfunc(const void * a, const void * b);
 void grafBarras(t_cont arr[]);
+void ordenarArr(t_cont arr[]);
 
 int main(void){
     t_cont arr[MAX];
-	
-	
-	arr[0].num = 1;
-	arr[0].veces = 4;
-	arr[1].num = 2;
-	arr[1].veces = 2;
-	arr[2].num = 3;
-	arr[2].veces = 6;
-	arr[3].num = 4;
-	arr[3].veces = 1;
-	
-	/*cargarArrRand(arr);*/
+    int i;
+
+    for(i = 0; i < 21; i++){
+        arr[i].num = i;
+        arr[i].veces = 0;
+    }
+
+    cargarArrRand(arr);
+   /* ordenarArr(arr); */
 	grafBarras(arr);
 
 
@@ -41,56 +38,77 @@ int main(void){
 }
 
 void cargarArrRand(t_cont arr[]){
-	int aux,i;
+	int aux,i,j;
 	bool_t ban, isarr;
 	clock_t begin;
 	
 	begin = clock();
 	ban = TRUE;
+    j = 0;
 	
 	while(ban == TRUE){
+        j++;
 		aux = rand() % 20;
-		printf("%d\n",aux);
-		isarr = FALSE;
-		
+	    printf("%d-",aux);
+        isarr = FALSE;
 		for(i = 0; i < MAX && isarr == FALSE; i++){
 			if(arr[i].num == aux){
 				arr[i].veces += 1;
-				printf("%d\n",arr[i].num);
-				isarr = TRUE;
+                isarr = TRUE;
 			}
 		}
-		if(isarr == FALSE){
-			for(i = 0; arr[i].num != '\0'; i++);
-			arr[i].num = aux;
-			arr[i].veces += 1;
-		}
-		if(((int)(clock()-begin)/CLOCKS_PER_SEC) > T){
-			ban == FALSE;
+		if(((double)(clock()-begin)/CLOCKS_PER_SEC) > T){
+			ban = FALSE;
 		}
 		
 	}
+    printf("GENERO: %d\n", j);
 }
 	
-int cmpfunc(const void * a, const void * b){
-	return (*(int*)a - *(int*)b);	
-}
-
 void grafBarras(t_cont arr[]){
 	int i,j,c;
 	printf("\nCantidad de Apariciones de un INT\n");
-	for (i = 0; i < 4; i++){
+	for (i = 0; i < 21; i++){
 		c = arr[i].veces;
 		printf("%d |", arr[i].num);
 		
 		for (j = 0; j < c; j++)
 		{
-			printf("%c", (char)254u);
+			printf("");
 		}
 		printf("\n");
 	}
 }
 
+void ordenarArr(t_cont arr[]){
+    t_cont aux;
+    int i, j,len;
+    
+    printf("\n----ANTES ----\n");
+    printf("numero - veces\n");
+    for(i = 0; i < MAX; i++){
+        printf("%d - %d\n", arr[i].num,arr[i].veces);
+    }
+    printf("\n");
 
+    len = MAX;
+
+    for(i = 0;i < len-1; i++){
+        for(j = i + 1; j < len; j++){
+            if(arr[i].num > arr[j].num){
+                aux = arr[i];
+                arr[i] = arr[j];
+                arr[j] = aux;
+            }
+        }
+    }
+    printf("\n---- DESPUES ----\n");
+    printf("numero - veces\n");
+    for(i = 0; i < len; i++){
+        printf("%d - %d\n", arr[i].num,arr[i].veces);
+    }
+    printf("\n");
+
+}
 
 
