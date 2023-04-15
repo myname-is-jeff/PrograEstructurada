@@ -7,6 +7,7 @@ encuentra más lejos del origen de coordenadas (0;0)
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct s_punto{
     int x;
@@ -20,14 +21,14 @@ double norm(int x, int y);
 int main(void){
     t_pos A,B;
     
-    A.nombre = "A";
+    A.nombre = 'A';
     A.x = 3;
     A.y = 5;
     A.norma = norm(A.x,A.y);
 
-    B.nombre = "B";
-    B.x = 3;
-    B.y = 5;
+    B.nombre = 'B';
+    B.x = 6;
+    B.y = 2;
     B.norma = norm(B.x,B.y);
     
     if (A.norma > B.norma){
@@ -41,5 +42,5 @@ int main(void){
 }
 
 double norm(int x , int y){
-    return(sqrt());
+    return(sqrt(pow(x,2) + pow(y,2)));
 }
