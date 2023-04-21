@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ncurses.h>
+#include <curses.h>
+#include <menu.h>
 
 #define  N 5
 
@@ -17,6 +20,13 @@ typedef struct{
 	char pais[50];
 }person_t;
 
+typedef struct{
+    int height;
+    int width;
+    int startx;
+    int starty;
+}screen_t;
+
 void cargarArrDeArch(person_t arr[], char nombre_arch[]);
 void imprimirTabla(person_t arr[]);
 option_t menu();
@@ -24,13 +34,86 @@ void ordenarArr(person_t arr[], option_t op);
 
 int main(void){
 	person_t arr[N];
+    int i,ch;
+    MENU *menu;
 	char nombre_arch[] = "personas.txt";
-	
+	ITEM *items[5];
+    ITEM *selected_item;
+    WINDOW *w;
+    screen_t principal,tabla;
+
+    principal.height = 5;principal.width = 50; principal.startx = 10; principal.starty = 10; 
+    tabla.height = 5;tabla.width = 50; tabla.startx = 10; tabla.starty = 10;
+    
+    initscr();
+    
+    w = newwin(principal.height,principal.width,principal.starty, principal.startx);
+    refresh();
+    box(w,0,0);
+    wrefresh(w);
+    items[0] = new_item("Option 1","Ver listado ordenado por nombre");
+    items[1] = new_item("Option 2","Ver listado ordenado por documento");
+    items[2] = new_item("Option 3","Ver listado ordenado por pais");
+    items[3] = new_item("Option 4","Salir del programa");
+
+    menu = new_menu(items); 
+    keypad(w, TRUE);
+    set_menu_win(menu,w); 
+    set_menu_sub(menu, derwin(w, 6, 50, 3, 1));
+    set_menu_format(menu, 5, 1);
+    set_menu_mark(menu, "> ");
+    attron(A_BOLD); 
+    mvprintw(LINES - 2, 0, "Use arrow keys to navigate, ENTER to select");
+    attroff(A_BOLD);
+    refresh();
+    post_menu(menu);
+    wrefresh(w);
 	cargarArrDeArch(arr,nombre_arch);
-	ordenarArr(arr,menu());
-	imprimirTabla(arr);
+    
+    while ((ch = getch()) != 27) {
+        switch (ch) {
+            case KEY_DOWN:
+                menu_driver(menu, REQ_DOWN_ITEM);
+                break;
+            case KEY_UP:
+                menu_driver(menu, REQ_UP_ITEM);
+                break;
+            case 10:
+                selected_item = current_item(menu);
+                switch (item_index(selected_item)) {
+                    case 0:
+                        ordenarArr(arr,0);
+                        break;
+                    case 1:
+                        ordenarArr(arr,1);
+                        break;
+                    case 2:
+                        ordenarArr(arr,2);
+                        break;
+                    case 3:
+                        ordenarArr(arr,3);
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    wrefresh(stdscr);
+    }
+
+
+    
+   /*limpiar y cerrar todo*/ 
+    unpost_menu(menu); /* remove the menu from the screen*/
+    free_menu(menu); /* free the memory used by the menu*/
+    for (i = 0; i < 4; i++) {
+        free_item(items[i]); /* free the memory used by each menu item*/
+    }
+    endwin(); /* exit the ncurses environment*/
+
+    imprimirTabla(arr);
 	
-	return 0;
+    return 0;
 }
 	
 	
@@ -88,35 +171,26 @@ void imprimirTabla(person_t arr[]){
 	int i,j,k;
 	person_t structaux;
 	
-	printf("Nombre              Documento         Pais\n");
-	printf("===================================================");
+	printw("Nombre              Documento         Pais\n");
+	printw("===================================================");
 	for(i = 0; i < 5; i++){
-		printf("\n");
+		printw("\n");
 		structaux = arr[i];
 		for(j = 0; structaux.nombre[j] != '\0'; j++);
 		j++;
-		printf("%s",structaux.nombre);
+		printw("%s",structaux.nombre);
 		for(k = j; k <= 20; k++){
-			printf(" ");
+			printw(" ");
 		}
 		for(k = k; k <= 21; k++){
-			printf(" ");
+			printw(" ");
 		}
-		printf("%d",structaux.dni);
+		printw("%d",structaux.dni);
 		for(k = k; k <= 30; k++){
-			printf(" ");
+			printw(" ");
 		}
-		printf("%s",structaux.pais);
+		printw("%s",structaux.pais);
 	}
-}
-
-option_t menu(){
-	option_t op;
-	printf("1- Ver listado ordenado por nombre\n2- Ver listado ordenado por documento\n3- Ver listado ordenado por país\n4- Salir del programa\n");
-	printf("Opcion (1-4): ");
-	scanf("%d",&op);
-	op--;
-	return op;
 }
 
 void ordenarArr(person_t arr[], option_t op){
