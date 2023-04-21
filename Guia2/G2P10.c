@@ -1,7 +1,3 @@
-/*
-Realizar una función que efectúe el SHIFT A DERECHA completando con 0 desde la
-izquierda. Aplicarla en un programa de ejemplo.*/
-
 #include <stdio.h>
 #include <stdlib.h>
 
