@@ -95,17 +95,8 @@ void imprimirTabla(person_t arr[]){
 		structaux = arr[i];
 		for(j = 0; structaux.nombre[j] != '\0'; j++);
 		j++;
-		printf("%s",structaux.nombre);
-		for(k = j; k <= 20; k++){
-			printf(" ");
-		}
-		for(k = k; k <= 21; k++){
-			printf(" ");
-		}
-		printf("%d",structaux.dni);
-		for(k = k; k <= 30; k++){
-			printf(" ");
-		}
+		printf("%-20s",structaux.nombre);
+		printf("%-18d",structaux.dni);
 		printf("%s",structaux.pais);
 	}
 }
