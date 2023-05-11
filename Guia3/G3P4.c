@@ -5,9 +5,9 @@ int numero, valor;
 char palo;
 }
 typedef struct s_carta t_carta;
-Desarrollar una función que modifique el contenido de 3 variables externas de este tipo,
-de manera que las cartas almacenadas en éstas queden ordenadas según su valor en el
-juego del “Truco”.*/
+Desarrollar una funcion que modifique el contenido de 3 variables externas de este tipo,
+de manera que las cartas almacenadas en estas queden ordenadas segun su valor en el
+juego del Truco�.*/
 
 #include <stdio.h>
 
