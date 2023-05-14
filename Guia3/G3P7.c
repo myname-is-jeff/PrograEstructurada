@@ -4,10 +4,10 @@
 char * cargarStrDin();
 
 int main(void){
-	char * p;
+	char * p = NULL;
 	p = cargarStrDin();
-	printf("REMITO: %s\n", p);
-	/*free(p);*/
+	printf("REMITO1: %s\n", p);
+	free(p);
 	/*porque aca el free me tira error? no debo liberar la memoria del arreglo dinamico?
 	o cuando lo devuelvo deja de ser din?*/
 	
@@ -44,3 +44,4 @@ char * cargarStrDin(){
 	
 	return str;
 }
+
