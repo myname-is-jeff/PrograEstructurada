@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 char * subcadena(char * p, int i, int n);
 char * leerArch(const char * nomArch);
@@ -11,10 +12,11 @@ int main(){
 	
 	i = 8; n = 5;
 	
-	if((str = leerArch("frase.txt")) == NULL){
+    if((str = leerArch("frase.txt")) == NULL){
 		printf("ERROR LEER ARCH\n");
 	}
 	else{
+
 		if((subStr = subcadena(str, i, n)) == NULL){
 			printf("ERROR SUBCADENA\n");
 		}
@@ -25,22 +27,22 @@ int main(){
 	}
 
 	return 0;
-}
+}
+
 char * subcadena(char * p, int i, int n){
 	char * str = NULL;
 	char * aux = NULL;
 	int j,end;
-	
 	end = i + n;
 	for(j = 0; p[j] != '\0'; j++);
 	if(j > (i + n)){
 		if((str = (char *)malloc(sizeof(char)*2)) == NULL){
-			printf("ERROR INICIO DE MEMORIA\n");
+			printf("ERROR INICIO DE MEMORIA SUBCADENA\n");
 		}
 		else{
 			for(j = 0; i < end; i++){
-				if((aux = realloc(str,sizeof(char))) == NULL){
-					printf("ERROR\n");
+				if((aux = realloc(str,sizeof(char)*(j+1))) == NULL){
+					printf("ERROR REALLOC SUBCADENA\n");
 				}
 				else{
 					str = aux;
@@ -69,24 +71,23 @@ char * leerArch(const char * nomArch){
 	}
 	else{
 		if(((str) = (char *)malloc(sizeof(char)*2)) == NULL){
-			printf("ERROR INICIO DE MEMORIA\n");
+			printf("ERROR INICIO DE MEMORIA LEERARCH\n");
 		}
 		else{
 			while(((fgets(string,2,fp)) != NULL)){
-				if((aux = realloc(str,sizeof(char))) == NULL){
-					printf("ERROR\n");
+				if((aux = realloc(str,sizeof(char)*(len+1))) == NULL){
+					printf("ERROR REALLOC LEERARCH\n");
 					break;
 				}
 				else{
-					str = aux;
+                    str = aux;
 					str[len] = string[0];
-					len++;
-				}
+                    len++;
+                }
 			}
-			str[len] = '\0';
 		}
+		str[len] = '\0';
 	}
-	
 	fclose(fp);
 	return str;
 }
