@@ -1,15 +1,19 @@
 #include <stdio.h>
 
 int * maxRP(int * arr);
-void ordenar(int * arr);
+int * minRP(int * arr);
+void ordenarAC(int * arr);
 void arrPrint(int * arr);
+void ordenarDC(int * arr);
 
 int main(void){
 	int arr[] = {13,25,3,4,5,10,7,8,9,1,0};
 	
 	arrPrint(arr);
-	ordenar(arr);
+	ordenarDC(arr);
 	arrPrint(arr);
+    ordenarAC(arr);
+    arrPrint(arr);
 	
 	return 0;
 }
@@ -35,16 +39,50 @@ int * maxRP(int * arr){
 	return res;
 }
 
-void ordenar(int * arr){
+int * minRP(int * arr){
+    int * res = NULL;
+    int * aux = NULL;
+    
+    if(*arr != 0){
+        aux = minRP(arr+1);
+        if(aux != NULL){
+            if(*arr>*aux){
+                res = aux;
+            }
+            else{
+                res = arr;
+            }
+        }
+        else{
+            res = arr;
+        }
+    }
+    return res;
+}
+void ordenarAC(int * arr){
+    int aux;
+    int * min;
+    min = minRP(arr);
+    aux = *arr;
+    *arr = *min;
+    *min = aux;
+    
+    if((*arr != 0) && (*(arr+1) != 0)){
+        ordenarAC(arr+1);
+    }
+}
+
+void ordenarDC(int * arr){
 	int aux;
-	if((*arr != 0) && (*(arr+1) != 0)){
-		if(*arr > *(arr+1)){
-			aux = *arr;
-			*arr = *(arr+1);
-			*(arr+1)= aux;
-		}
-		ordenar(arr+1);
-	}
+    int * max;
+
+    max = maxRP(arr);
+    aux = *arr;
+    *arr = *max;
+    *max = aux;
+    if((*arr != 0) && (*(arr+1) != 0)){
+        ordenarDC(arr+1);
+    }
 }
 	
 void arrPrint(int * arr){
