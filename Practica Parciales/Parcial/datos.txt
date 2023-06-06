@@ -1,0 +1,6 @@
+Papel Glace,10.3,736
+Lapicera Bic,7,1024
+Goma tinta,9.6,1821
+Lapiz HB,4.7,1848
+Regla 30,18.9,1810
+Escuadra 45,102.4,1910
