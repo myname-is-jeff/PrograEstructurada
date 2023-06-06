@@ -9,21 +9,12 @@ struct num_s{
 
 typedef struct num_s * num_t;
 
-typedef enum{
-	APPEND,
-	ORDER,
-	PRECITION,
-	FIRST,
-	EXIT
-}mode_t;
-
 void append(num_t lst, int val);
 void add(num_t lst, int val);
 void pAdd(num_t lst, int val, int pos);
 num_t oAdd(num_t lst, int val);
 void printLst(num_t lst);
 void loadLst(num_t * lst,char * fn);
-void addMenu(num_t * lst);
 
 int main(void){
 	num_t init;
@@ -39,6 +30,8 @@ int main(void){
 	printf("\n%-20s%-20s%-20s\n","Valor","Dir Nodo","Dir Next");
 	printf("%060d",0);
 	printLst(init->next);
+    pAdd(init->next, 4, 11);
+    printLst(init->next);
 	
 	return 0;
 }
@@ -68,7 +61,7 @@ void loadLst(num_t * lst,char * fn){
 	fclose(fp);
 }
 
- num_t oAdd(num_t lst, int val){
+num_t oAdd(num_t lst, int val){
 	num_t res,aux;
 	res = NULL;
 	aux = NULL;
@@ -123,7 +116,31 @@ void add(num_t lst, int val){
 		lst->next = aux;
 	}
 }
-	
+
+void pAdd(num_t lst, int val, int pos){
+    num_t aux = NULL;
+
+    if(lst != NULL){
+        if(pos == 0){
+            if((aux = (num_t)malloc(sizeof(struct num_s))) == NULL){
+                printf("ERROR MEMORY ALLOC PADD\n");
+            }
+            else{
+                aux->num = val;
+                aux->next = lst->next;
+                lst->next = aux;
+            }
+
+        }
+        else{
+            pAdd(lst->next,val,pos-1);
+        }
+    }
+    else{
+        printf("O te fuiste de cota o hubo un error\n");
+    }
+}
+
 void printLst(num_t lst){
 	if(lst != NULL){
 		printf("\n%-20d%-20p%-20p",lst->num,lst,lst->next);
