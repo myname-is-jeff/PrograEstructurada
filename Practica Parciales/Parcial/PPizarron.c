@@ -21,19 +21,36 @@ struct node_s{
 
 typedef struct node_s * node_t;
 
+typedef enum{
+    CODE,
+    PRICE,
+    PRODUCT
+}filter_t;
+
+typedef enum{
+    TRUE,
+    FALSE
+}bool_t;
+
 void lstPrint(node_t * lst);
 void csvParser(char * str, contenido_t * cont);
 void oAdd(node_t * lst, contenido_t * aux);
 void cargarArch(const char * nomArch, node_t * lst, cabecera_t * cabecera);
 void cabeceraParser(char * str, cabecera_t * cab);
+void nodeDel(node_t * lst,  contenido_t * dNode, filter_t op);
+bool_t condition(node_t * nodeA, contenido_t * nodeB, filter_t op);
+bool_t conDel(node_t * nodeA, contenido_t * nodeB, filter_t op);
 
 int main(void){
     node_t lst = NULL;
     cabecera_t cab;
     char nomArch[] = "datos.txt";
+    contenido_t del;
 
     cargarArch(nomArch,&lst,&cab);
-    printf("HOLA\n");
+    lstPrint(&lst);
+    del.cod = 1848;
+    nodeDel(&lst, &del, CODE);
     lstPrint(&lst);
 
     return 0;
@@ -49,7 +66,6 @@ void cargarArch(const char * nomArch, node_t * lst, cabecera_t * cabecera){
         printf("ERROR OPENING FILE\n");
     }
     else{
-        /*fscanf(fp, "%s,%s,%s\n",cabecera->nom,cabecera->p,cabecera->cod);*/
         while(fgets(str,MAX_STR,fp) != NULL){
 			if(!ban){
 				cabeceraParser(str,cabecera);
@@ -57,7 +73,6 @@ void cargarArch(const char * nomArch, node_t * lst, cabecera_t * cabecera){
 			}
 			else{
 				csvParser(str,&aux);
-				printf("AUX CHECK: %-15s%15f%15d\n",aux.prod,aux.precio,aux.cod);
 				oAdd(lst,&aux);
 			}
         }
@@ -66,55 +81,103 @@ void cargarArch(const char * nomArch, node_t * lst, cabecera_t * cabecera){
 
 void oAdd(node_t * lst, contenido_t * aux){
     node_t naux;
-    printf("INIT ORDER ADD\n");
     if(*lst != NULL){
-		printf("*lst != NULL\n");
-		if((*lst)->producto.precio > aux->precio){
-			printf("(*lst)->producto.precio > aux->precio\n");
-			if((*lst)->next != NULL){
-				printf("*lst->next != NULL\n");
-				oAdd(&((*lst)->next),aux);
-				
-			}
-			else{
-				printf("ELSE: *lst->next != NULL\n");
-				if((naux = (node_t)malloc(sizeof(struct node_s))) == NULL){
-					printf("ERROR INITIATING NODE\n");
-				}
-				else{
-					naux->producto = *aux;
-					naux->next = NULL;
-					(*lst)->next = naux;
-				}
-			}
-		}
-		else{
-			printf("ELSE: (*lst)->producto.precio > aux->precio\n");
+        if(condition(lst,aux,PRODUCT) == TRUE){
 			if((naux = (node_t)malloc(sizeof(struct node_s))) == NULL){
 				printf("ERROR INITIATING NODE\n");
 			}
 			else{
 				naux->producto = *aux;
-				naux->next = (*lst)->next;
-				(*lst)->next = naux;
+				naux->next = (*lst);
+                (*lst) = naux;
 			}
-		}
-		
-	}
-    else{
-		printf("ELSE: *lst != NULL\n");
-        if((naux = (node_t)malloc(sizeof(struct node_s))) == NULL){
-             printf("ERROR INITIATING NODE\n");
-         }
+        }
         else{
-            naux->producto = *aux;
-            naux->next = NULL;
-            (*lst) = naux;
+            oAdd(&((*lst)->next),aux);
         }
     }
-
-    printf("END ORDER ADD\n");
+    else{
+	    if((*lst = (node_t)malloc(sizeof(struct node_s))) == NULL){
+			printf("ERROR INITIATING NODE\n");
+		}
+        else{
+			(*lst)->producto = *aux;
+			(*lst)->next = NULL;
+		}
+    }
 }
+
+void nodeDel(node_t * lst, contenido_t * dNode,filter_t op){
+    node_t aux = NULL;
+    printf("INIT NODE DEL\n");
+    if(*lst != NULL){
+        if(conDel(lst, dNode,op) == TRUE){
+            aux = (*lst)->next;
+            free((*lst)->producto.prod);
+            free((*lst));
+            *lst = aux;
+        }
+        else{
+            nodeDel(&((*lst)->next), dNode,op);
+        }
+    }
+    printf("END NODE DEL");
+}
+
+bool_t conDel(node_t * nodeA, contenido_t * nodeB,filter_t op){
+    bool_t res = FALSE;
+    int aux;
+
+    switch (op){
+        case CODE:
+            if(((*nodeA)->producto.cod) == (nodeB->cod)){
+                res = TRUE;
+            }
+            break;
+        case PRICE:
+            if(((*nodeA)->producto.precio) == (nodeB->precio)){
+                res = TRUE;
+            }
+            break;
+        case PRODUCT:
+            aux = strcmp((*nodeA)->producto.prod,(nodeB->prod));
+            if(aux == 0){
+                res = TRUE;
+            }
+            break;
+        default:
+            break;
+    }
+    return res;
+}
+
+bool_t condition(node_t * nodeA, contenido_t * nodeB, filter_t op){
+    bool_t res = FALSE;
+    int aux;
+
+    switch (op){
+        case CODE:
+            if(((*nodeA)->producto.cod) > (nodeB->cod)){
+                res = TRUE;
+            }
+            break;
+        case PRICE:
+            if(((*nodeA)->producto.precio) > (nodeB->precio)){
+                res = TRUE;
+            }
+            break;
+        case PRODUCT:
+            aux = strcmp((*nodeA)->producto.prod,(nodeB->prod));
+            if( (aux > 0) || (aux < 0)){
+                res = TRUE;
+            }
+            break;
+        default:
+            break;
+    }
+    return res;
+}
+
 void cabeceraParser(char * str, cabecera_t * cab){
 	int i,j,contador;
 	char token[50];
