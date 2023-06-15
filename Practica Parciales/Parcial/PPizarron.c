@@ -32,26 +32,52 @@ typedef enum{
     FALSE
 }bool_t;
 
-void lstPrint(node_t * lst);
-void csvParser(char * str, contenido_t * cont);
-void oAdd(node_t * lst, contenido_t * aux);
-void cargarArch(const char * nomArch, node_t * lst, cabecera_t * cabecera);
-void cabeceraParser(char * str, cabecera_t * cab);
-void nodeDel(node_t * lst,  contenido_t * dNode, filter_t op);
-bool_t condition(node_t * nodeA, contenido_t * nodeB, filter_t op);
-bool_t conDel(node_t * nodeA, contenido_t * nodeB, filter_t op);
+void lstPrint(node_t * lst);//
+void csvParser(char * str, contenido_t * cont);//
+void oAdd(node_t * lst, contenido_t * aux);//
+void cargarArch(const char * nomArch, node_t * lst, cabecera_t * cabecera);//
+void cabeceraParser(char * str, cabecera_t * cab);//
+void nodeDel(node_t * lst,  contenido_t * dNode, filter_t op);//
+bool_t condition(contenido_t nodeA, contenido_t nodeB, filter_t op);//
+bool_t conDel(node_t * nodeA, contenido_t * nodeB, filter_t op);//
+void ranDel(int start, int stop, node_t * lst, filter_t op);
+void ordenar(node_t lst, filter_t op);
+void lstDel(node_t * lst);
+void push(node_t * lst, contenido_t * node); /*append al principio de la lista*/
+void pop(node_t * lst);/*borra el primer elemento de la lista*/
+int conRan(int start, int stop);
+void eOrd(node_t lst, node_t node, filter_t op);
+
 
 int main(void){
     node_t lst = NULL;
     cabecera_t cab;
     char nomArch[] = "datos.txt";
     contenido_t del;
-
+	
+	del.precio = 4.7;
+	del.prod = "Lapiz HB";
+	del.cod = 1848;
+	
     cargarArch(nomArch,&lst,&cab);
     lstPrint(&lst);
-    del.cod = 1848;
+	printf("CARGAR ARCH----------------------------------------------------\n\n");
+	
     nodeDel(&lst, &del, CODE);
     lstPrint(&lst);
+	printf("NODE DEL-------------------------------------------------------\n\n");
+	
+	push(&lst, &del);
+	lstPrint(&lst);
+	printf("PUSH-----------------------------------------------------------\n\n");
+	
+	ordenar(lst, PRICE);
+	lstPrint(&lst);
+	printf("ORDENAR--------------------------------------------------------\n\n");
+	
+	pop(&lst);
+	lstPrint(&lst);
+	printf("POP------------------------------------------------------------\n\n");
 
     return 0;
 }
@@ -82,7 +108,7 @@ void cargarArch(const char * nomArch, node_t * lst, cabecera_t * cabecera){
 void oAdd(node_t * lst, contenido_t * aux){
     node_t naux;
     if(*lst != NULL){
-        if(condition(lst,aux,PRODUCT) == TRUE){
+        if(condition(((*lst)->producto),*aux,PRODUCT) == TRUE){
 			if((naux = (node_t)malloc(sizeof(struct node_s))) == NULL){
 				printf("ERROR INITIATING NODE\n");
 			}
@@ -106,10 +132,33 @@ void oAdd(node_t * lst, contenido_t * aux){
 		}
     }
 }
+void eOrd(node_t lst, node_t nodo, filter_t op){
+	contenido_t aux;
+	
+	if((lst != NULL) && (nodo != NULL)){
+		if(condition((lst)->producto,nodo->producto,op) == TRUE){
+			aux = (lst)->producto;
+			nodo = (lst)->next;
+			(lst)->producto = nodo->producto;
+			nodo->producto = aux;
+		}
+		else{
+			eOrd((lst->next),nodo,op);
+		}
+	}
+}
+void ordenar(node_t lst, filter_t op){
+	node_t nodo = NULL;
+	
+	if(lst != NULL){
+		nodo = (lst)->next;
+		eOrd(lst,nodo,op);
+		ordenar((lst->next),op);
+	}
+}
 
 void nodeDel(node_t * lst, contenido_t * dNode,filter_t op){
     node_t aux = NULL;
-    printf("INIT NODE DEL\n");
     if(*lst != NULL){
         if(conDel(lst, dNode,op) == TRUE){
             aux = (*lst)->next;
@@ -121,9 +170,30 @@ void nodeDel(node_t * lst, contenido_t * dNode,filter_t op){
             nodeDel(&((*lst)->next), dNode,op);
         }
     }
-    printf("END NODE DEL");
 }
 
+void push(node_t * lst, contenido_t * node){
+	node_t naux = NULL;
+	
+	if((naux = (node_t)malloc(sizeof(struct node_s))) == NULL){
+		printf("ERROR INITIATING NODE\n");
+	}
+	else{
+		naux->producto = *node;
+		naux->next = (*lst);
+		(*lst) = naux;
+	}
+}
+
+void pop(node_t * lst){
+	node_t aux;
+	if(*lst != NULL){
+		aux = *lst;
+		*lst = (*lst)->next;
+		free(aux);
+	}
+}
+	
 bool_t conDel(node_t * nodeA, contenido_t * nodeB,filter_t op){
     bool_t res = FALSE;
     int aux;
@@ -151,23 +221,23 @@ bool_t conDel(node_t * nodeA, contenido_t * nodeB,filter_t op){
     return res;
 }
 
-bool_t condition(node_t * nodeA, contenido_t * nodeB, filter_t op){
+bool_t condition(contenido_t nodeA, contenido_t nodeB, filter_t op){
     bool_t res = FALSE;
     int aux;
 
     switch (op){
         case CODE:
-            if(((*nodeA)->producto.cod) > (nodeB->cod)){
+            if((nodeA.cod) < (nodeB.cod)){
                 res = TRUE;
             }
             break;
         case PRICE:
-            if(((*nodeA)->producto.precio) > (nodeB->precio)){
+            if((nodeA.precio) < (nodeB.precio)){
                 res = TRUE;
             }
             break;
         case PRODUCT:
-            aux = strcmp((*nodeA)->producto.prod,(nodeB->prod));
+            aux = strcmp(nodeA.prod,(nodeB.prod));
             if( (aux > 0) || (aux < 0)){
                 res = TRUE;
             }
